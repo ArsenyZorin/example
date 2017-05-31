@@ -62,24 +62,24 @@
 
 \subsection{Настройка Ubuntu Server}
 Все сервера должны иметь статические IP-адреса. Для их настройки необходимо отредактировать файл /etc/network/interfaces. Для статического IP указываем слежующие настройки. Указанные настройки идентичны для каждого сервера. Различаются только адреса. 
-\lstinputlisting[label=code:hello]{listings/ubuntuServer}
+\lstinputlisting{listings/ubuntuServer}
 
 \subsection{Настройка клиентской Ubuntu}
 Для корректного получения настроек по сети, на пользовательской машине достаточно будет настроить работу с DHCP.
-\lstinputlisting[label=code:hello]{listings/ubuntu}
+\lstinputlisting{listings/ubuntu}
 
 \section{Установка и настройка сетевых сервисов}
 \subsection{Настройка DHCP}
 Настройку DHCP сервера производим на маршрутизаторе с ОС NetBSD. Настройки DHCP сервера находятся в фалйе /etc/dhcpd.conf. В том случае, если данного файла нет в системе, его необходимо создать. В конфигурационном файле указывается доменное имя сети, адрес DNS, и настройки для сети.\\
-Если все настройки заданы верно, то при включении DHCP на клиентской машине, будут выданы IP-адрес из указанного диапазона, шлюз по умолчанию и адрес DNS сервера (рис. ).
+Если все настройки заданы верно, то при включении DHCP на клиентской машине, будут выданы IP-адрес из указанного диапазона, шлюз по умолчанию и адрес DNS сервера.
 
 \subsection{Настройка DNS}
 Настройка DNS производится на сервере с ОС Ubuntu Server и IP-адресом: 192.168.10.7. Для выполнения этой задачи необходимо установить DNS сервер BIND9. Данный сервер доступен из репозитриев Ubuntu. Следовательно, для его установки будет достаточно команды:\textit{sudo apt install bind9}.
 После установки, приступаем непосредственно к конфигурации сервера. Основные его настройки находятся в файле \textit{/etc/named.conf}:
-\lstinputlisting[label=code:hello]{listings/bind9}
+\lstinputlisting{listings/bind9}
 
 Единственное изменение, внесенное в данный файл - объявление своей зоны \textit{example.com}. В этом файле мы указали, что данный сервер будет мастер-сервером для этой зоны и указали путь к файлу с описанием этой зоны. Ниже покажем содержание данного файла:
-\lstinputlisting[label=code:hello]{listings/dns}
+\lstinputlisting{listings/dns}
 
 В данном файле, помимо стандартных записей были указаны:
 \begin{itemize}
@@ -102,7 +102,7 @@ sudo systemctl enable named
 	\item Настройка SSL подключения
 \end{itemize}
 Настройки сервера производятся в файле \textit{/etc/vsftpd/vsftpd.conf}:
-\lstinputlisting[label=code:hello]{listings/ftp}
+\lstinputlisting{listings/ftp}
 После настройки - перезапускаем сервер и добавляем его в автозагрузку:
 \begin{lstlisting}
 sudo systemctl restart vsftpd
@@ -144,7 +144,7 @@ sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sour
 sudo apt update
 sudo apt install jenkins
 \end{lstlisting}
-Данные команды устанавливают Jenkins и, в последующем, он будет запускаться в виде демона на старте системы. По умолчанию Jenkins запускается по адресу \texit{http://localhost:8080/}. Для того, чтобы можно было получить доступ к Jencins по адресу \texit{ci.example.com}, необходимо настроить nginx. Сначала необходимо его установить и удалить стандартные настройки:
+Данные команды устанавливают Jenkins и, в последующем, он будет запускаться в виде демона на старте системы. По умолчанию Jenkins запускается по адресу \textit{http://localhost:8080/}. Для того, чтобы можно было получить доступ к Jenkins по адресу \textit{ci.example.com}, необходимо настроить nginx. Сначала необходимо его установить и удалить стандартные настройки:
 \begin{lstlisting}
 sudo aptitude -y install nginx
 cd /etc/nginx/sites-available
@@ -152,9 +152,17 @@ sudo rm default ../sites-enabled/default
 \end{lstlisting}
 
 Создаем свои настройки и указываем ci.example.com.
-\lstinputlisting[label=code:hello]{listings/nginx}
+\lstinputlisting{listings/nginx}
 
-Вся последующая конфигурация работы Jenkins производится с помощью вебинтерфейса.
+Вся последующая конфигурация работы Jenkins производится с помощью вебинтерфейса. Пример конфигурации, завязанной на git, приведен ниже:
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.6\linewidth]{pics/jenkins}
+		\caption{Пример настройки Jenkins}
+		\label{fig:jenkins}
+	\end{center}
+\end{figure}
+
 
 \section*{Заключение}
 \addcontentsline{toc}{section}{Заключение}
