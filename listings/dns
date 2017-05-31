@@ -1,0 +1,25 @@
+$TTL 86400
+@   IN  SOA   dns.example.com  root.example.com. (
+        2014120801  ;Serial
+        3600        ;Refresh
+        1800        ;Retry
+        604800      ;Expire
+        86400       ;Minimum TTL
+)
+
+; Указываем name сервера
+		IN	NS		dns.example.com.
+; Определяем IP адреса name серверов
+dns		IN	A		8.8.8.8
+
+; Add current server as example.com
+@		IN	A		192.168.10.7
+; Add current server as www.example.com
+www		IN	A		192.168.10.7
+; Add current server as ftp.example.com
+ftp		IN	A		192.168.10.8
+; Add current server as mail.example.com
+mail		IN	A		192.168.10.7
+@		IN 	MX 10 		mail
+; Add jenkins server
+ci		IN	A		192.168.10.8
